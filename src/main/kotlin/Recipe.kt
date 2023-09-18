@@ -1,6 +1,3 @@
-import Category
-import Ingredient
-
 class Recipe(
     val title: String,
     val description: String,
@@ -14,9 +11,16 @@ class Recipe(
     }
 
     fun printSteps() {
-        println(steps)
+        for (step in steps) {
+            println(step)
+        }
     }
 
+    fun printIngreients() {
+        for (item in ingredients) {
+            println(item)
+        }
+    }
 
 
 

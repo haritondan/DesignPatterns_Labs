@@ -40,116 +40,257 @@ fun main() {
         indianCategory
     )
 
-
-
     recipeOrganizer.addRecipe(spaghettiRecipe)
     recipeOrganizer.addRecipe(chickenCurryRecipe)
     recipeOrganizer.addCategory(italianCategory)
     recipeOrganizer.addCategory(indianCategory)
 
-    while (true) {
-        println("1. Add Recipe")
-        println("2. Edit Recipe")
-        println("3. Delete Recipe")
-        println("4. View All Recipes")
-        println("5. Exit")
-        print("Enter your choice: ")
+    when (readLine()?.toIntOrNull()) {
+        1 -> {
+            // Create User
+            print("Enter username: ")
+            val username = readLine() ?: ""
+            print("Enter password: ")
+            val password = readLine() ?: ""
 
-        when (readlnOrNull()?.toIntOrNull()) {
-            1 -> {
-                recipeOrganizer.addRecipe(
-                    Recipe(
-                        readln(),
-                        readln(),
-                        mutableListOf(),
-                        mutableListOf(readln(), readln()),
-                        when(readln().toIntOrNull()) {
-                            1 -> {italianCategory}
-                            else -> {indianCategory}
+            if (recipeOrganizer.createUser(username, password)) {
+                println("User created and logged in.")
+                while (true) {
+                    println("1. Add Recipe")
+                    println("2. Edit Recipe")
+                    println("3. Delete Recipe")
+                    println("4. View All Recipes")
+                    println("5. Exit")
+                    print("Enter your choice: ")
+
+                    when (readlnOrNull()?.toIntOrNull()) {
+                        1 -> {
+                            recipeOrganizer.addRecipe(
+                                Recipe(
+                                    readln(),
+                                    readln(),
+                                    mutableListOf(),
+                                    mutableListOf(readln(), readln()),
+                                    when(readln().toIntOrNull()) {
+                                        1 -> {italianCategory}
+                                        else -> {indianCategory}
+                                    }
+                                )
+                            )
+
                         }
-                    )
-                )
+                        2 -> {
+                            // Edit a recipe
 
-            }
-            2 -> {
-                // Edit a recipe
+                            // Display a list of recipes for the user to choose from
+                            println("Recipes:")
+                            val allRecipes = recipeOrganizer.getAllRecipes()
+                            allRecipes.forEachIndexed { index, recipe ->
+                                println("${index + 1}. ${recipe.title}")
+                            }
 
-                // Display a list of recipes for the user to choose from
-                println("Recipes:")
-                val allRecipes = recipeOrganizer.getAllRecipes()
-                allRecipes.forEachIndexed { index, recipe ->
-                    println("${index + 1}. ${recipe.title}")
-                }
+                            print("Enter the number of the recipe you want to edit: ")
+                            val recipeIndexToEdit = readLine()?.toIntOrNull()
 
-                print("Enter the number of the recipe you want to edit: ")
-                val recipeIndexToEdit = readLine()?.toIntOrNull()
+                            if (recipeIndexToEdit != null && recipeIndexToEdit >= 1 && recipeIndexToEdit <= allRecipes.size) {
+                                val recipeToEdit = allRecipes[recipeIndexToEdit - 1]
 
-                if (recipeIndexToEdit != null && recipeIndexToEdit >= 1 && recipeIndexToEdit <= allRecipes.size) {
-                    val recipeToEdit = allRecipes[recipeIndexToEdit - 1]
+                                // Prompt the user for new details
+                                print("Enter new title (or press Enter to keep it as '${recipeToEdit.title}'): ")
+                                val newTitle = readLine() ?: recipeToEdit.title
 
-                    // Prompt the user for new details
-                    print("Enter new title (or press Enter to keep it as '${recipeToEdit.title}'): ")
-                    val newTitle = readLine() ?: recipeToEdit.title
+                                print("Enter new description (or press Enter to keep it as '${recipeToEdit.description}'): ")
+                                val newDescription = readLine() ?: recipeToEdit.description
 
-                    print("Enter new description (or press Enter to keep it as '${recipeToEdit.description}'): ")
-                    val newDescription = readLine() ?: recipeToEdit.description
-
-                    // You can similarly prompt for new details for ingredients, steps, and category
-                    print("Enter new ingredients (or press Enter to keep it as '${recipeToEdit.ingredients}'): ")
-                    val newIngredients = mutableListOf() ?: recipeToEdit.ingredients
+                                // You can similarly prompt for new details for ingredients, steps, and category
+                                print("Enter new ingredients (or press Enter to keep it as '${recipeToEdit.ingredients}'): ")
+                                val newIngredients = mutableListOf() ?: recipeToEdit.ingredients
 
 
-                    // Create a new Recipe with the updated details
-                    val editedRecipe = Recipe(
-                        newTitle,
-                        newDescription,
-                        /* new ingredients, steps, and category */
-                        newIngredients,
-                        mutableListOf(readln(), readln()),
-                        when(readln().toIntOrNull()) {
-                            1 -> {italianCategory}
-                            else -> {indianCategory}
+                                // Create a new Recipe with the updated details
+                                val editedRecipe = Recipe(
+                                    newTitle,
+                                    newDescription,
+                                    /* new ingredients, steps, and category */
+                                    newIngredients,
+                                    mutableListOf(readln(), readln()),
+                                    when(readln().toIntOrNull()) {
+                                        1 -> {italianCategory}
+                                        else -> {indianCategory}
+                                    }
+                                )
+
+                                // Update the recipe in the organizer
+                                recipeOrganizer.editRecipe(recipeToEdit, editedRecipe)
+                                println("Recipe edited successfully!")
+                            } else {
+                                println("Invalid recipe number. Please try again.")
+                            }
+
                         }
-                    )
+                        3 -> {
+                            // Delete a recipe
+                            // Prompt the user for the recipe to delete and use recipeOrganizer.deleteRecipe()
+                        }
+                        4 -> {
+                            // View recipes
+                            // Display recipes based on user preferences (e.g., by category)
+                            println("Recipes:")
+                            val allRecipes = recipeOrganizer.getAllRecipes()
+                            allRecipes.forEachIndexed { index, recipe ->
+                                println("${index + 1}. ${recipe.title}")
+                            }
+                            print("Enter the number of the recipe you want to view: ")
+                            val recipeIndexToView = readLine()?.toIntOrNull()
 
-                    // Update the recipe in the organizer
-                    recipeOrganizer.editRecipe(recipeToEdit, editedRecipe)
-                    println("Recipe edited successfully!")
-                } else {
-                    println("Invalid recipe number. Please try again.")
+                            if (recipeIndexToView != null && recipeIndexToView >= 1 && recipeIndexToView <= allRecipes.size) {
+                                val recipeToView = allRecipes[recipeIndexToView - 1]
+
+                                println(recipeToView.title + "\n" + recipeToView.description)
+                                println("\nIngredients: ")
+                                recipeToView.printIngreients()
+                                println("\nPreparation Steps: ")
+                                recipeToView.printSteps()
+
+
+                            } else {
+                                println("Invalid recipe number. Please try again.")
+                            }
+                        }
+                        5 -> {
+                            // Exit the program
+                            return
+                        }
+                        else -> println("Invalid choice. Please try again.")
+                    }
                 }
-
+            } else {
+                println("Username already exists. Try a different one.")
             }
-            3 -> {
-                // Delete a recipe
-                // Prompt the user for the recipe to delete and use recipeOrganizer.deleteRecipe()
-            }
-            4 -> {
-                // View recipes
-                // Display recipes based on user preferences (e.g., by category)
-                println("Recipes:")
-                val allRecipes = recipeOrganizer.getAllRecipes()
-                allRecipes.forEachIndexed { index, recipe ->
-                    println("${index + 1}. ${recipe.title}")
-                }
-                print("Enter the number of the recipe you want to view: ")
-                val recipeIndexToView = readLine()?.toIntOrNull()
-
-                if (recipeIndexToView != null && recipeIndexToView >= 1 && recipeIndexToView <= allRecipes.size) {
-                    val recipeToView = allRecipes[recipeIndexToView - 1]
-
-                    println(recipeToView.title + "\n" + recipeToView.ingredients.toString() + "\n" + recipeToView.description + "\n" + recipeToView.steps.toString() + "\n" + recipeToView.category)
-
-                } else {
-                    println("Invalid recipe number. Please try again.")
-                }
-            }
-            5 -> {
-                // Exit the program
-                return
-            }
-            else -> println("Invalid choice. Please try again.")
         }
+        2 -> {
+            // Log In
+            print("Enter username: ")
+            val username = readLine() ?: ""
+            print("Enter password: ")
+            val password = readLine() ?: ""
+
+            if (recipeOrganizer.login(username, password)) {
+                println("Logged in as $username.")
+                while (true) {
+                    println("1. Add Recipe")
+                    println("2. Edit Recipe")
+                    println("3. Delete Recipe")
+                    println("4. View All Recipes")
+                    println("5. Exit")
+                    print("Enter your choice: ")
+
+                    when (readlnOrNull()?.toIntOrNull()) {
+                        1 -> {
+                            recipeOrganizer.addRecipe(
+                                Recipe(
+                                    readln(),
+                                    readln(),
+                                    mutableListOf(),
+                                    mutableListOf(readln(), readln()),
+                                    when(readln().toIntOrNull()) {
+                                        1 -> {italianCategory}
+                                        else -> {indianCategory}
+                                    }
+                                )
+                            )
+
+                        }
+                        2 -> {
+                            // Edit a recipe
+
+                            // Display a list of recipes for the user to choose from
+                            println("Recipes:")
+                            val allRecipes = recipeOrganizer.getAllRecipes()
+                            allRecipes.forEachIndexed { index, recipe ->
+                                println("${index + 1}. ${recipe.title}")
+                            }
+
+                            print("Enter the number of the recipe you want to edit: ")
+                            val recipeIndexToEdit = readLine()?.toIntOrNull()
+
+                            if (recipeIndexToEdit != null && recipeIndexToEdit >= 1 && recipeIndexToEdit <= allRecipes.size) {
+                                val recipeToEdit = allRecipes[recipeIndexToEdit - 1]
+
+                                // Prompt the user for new details
+                                print("Enter new title (or press Enter to keep it as '${recipeToEdit.title}'): ")
+                                val newTitle = readLine() ?: recipeToEdit.title
+
+                                print("Enter new description (or press Enter to keep it as '${recipeToEdit.description}'): ")
+                                val newDescription = readLine() ?: recipeToEdit.description
+
+                                // You can similarly prompt for new details for ingredients, steps, and category
+                                print("Enter new ingredients (or press Enter to keep it as '${recipeToEdit.ingredients}'): ")
+                                val newIngredients = mutableListOf() ?: recipeToEdit.ingredients
+
+
+                                // Create a new Recipe with the updated details
+                                val editedRecipe = Recipe(
+                                    newTitle,
+                                    newDescription,
+                                    /* new ingredients, steps, and category */
+                                    newIngredients,
+                                    mutableListOf(readln(), readln()),
+                                    when(readln().toIntOrNull()) {
+                                        1 -> {italianCategory}
+                                        else -> {indianCategory}
+                                    }
+                                )
+
+                                // Update the recipe in the organizer
+                                recipeOrganizer.editRecipe(recipeToEdit, editedRecipe)
+                                println("Recipe edited successfully!")
+                            } else {
+                                println("Invalid recipe number. Please try again.")
+                            }
+
+                        }
+                        3 -> {
+                            // Delete a recipe
+                            // Prompt the user for the recipe to delete and use recipeOrganizer.deleteRecipe()
+                        }
+                        4 -> {
+                            // View recipes
+                            // Display recipes based on user preferences (e.g., by category)
+                            println("Recipes:")
+                            val allRecipes = recipeOrganizer.getAllRecipes()
+                            allRecipes.forEachIndexed { index, recipe ->
+                                println("${index + 1}. ${recipe.title}")
+                            }
+                            print("Enter the number of the recipe you want to view: ")
+                            val recipeIndexToView = readLine()?.toIntOrNull()
+
+                            if (recipeIndexToView != null && recipeIndexToView >= 1 && recipeIndexToView <= allRecipes.size) {
+                                val recipeToView = allRecipes[recipeIndexToView - 1]
+
+                                println(recipeToView.title + "\n" + recipeToView.ingredients.toString() + "\n" + recipeToView.description + "\n" + recipeToView.steps.toString() + "\n" + recipeToView.category)
+
+                            } else {
+                                println("Invalid recipe number. Please try again.")
+                            }
+                        }
+                        5 -> {
+                            // Exit the program
+                            return
+                        }
+                        else -> println("Invalid choice. Please try again.")
+                    }
+                }
+            } else {
+                println("Invalid username or password.")
+            }
+        }
+        3 -> {
+            // Log Out
+            recipeOrganizer.logout()
+            println("Logged out.")
+        }
+        // ... (other menu options)
     }
 
 
