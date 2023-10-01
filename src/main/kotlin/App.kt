@@ -1,4 +1,4 @@
-import actions.Action
+import interfaces.Action
 import managers.MenuManager
 import user.UserInputHandler
 

@@ -1,9 +1,11 @@
 package actions
 
-import managers.RecipeOrganizer
 import user.UserInputHandler
+import interfaces.Action
+import interfaces.RecipeEditor
+import interfaces.RecipeViewer
 
-class EditRecipe(private val recipeOrganizer: RecipeOrganizer, private val userInput: UserInputHandler) : Action {
+class EditRecipe(private val recipeEditor: RecipeEditor, private val recipeViewer: RecipeViewer, private val userInput: UserInputHandler) : Action {
 
 
     override fun execute() {
@@ -17,9 +19,9 @@ class EditRecipe(private val recipeOrganizer: RecipeOrganizer, private val userI
 
         val recipeIndex = userInput.promptForRecipeIndex()
         if (recipeIndex != null) {
-            val oldRecipe = recipeOrganizer.getAllRecipes()[recipeIndex - 1]
+            val oldRecipe = recipeViewer.getAllRecipes()[recipeIndex - 1]
             val newRecipe = userInput.promptForRecipeDetails(oldRecipe)
-            recipeOrganizer.editRecipe(oldRecipe, newRecipe)
+            recipeEditor.editRecipe(oldRecipe, newRecipe)
 
             println("The recipe has been successfully edited.")
         } else {

@@ -52,7 +52,7 @@ fun main() {
 ```
 App.kt
 ```kotlin
-class App(private val actions: List<Action>, private val menuManager: MenuManager, private val userInput: UserInputHandler)
+class App(private val actions: List<interfaces.Action>, private val menuManager: MenuManager, private val userInput: UserInputHandler)
 ```
 class App uses actions from the action package, the menu manager class and the user input class
 
@@ -66,8 +66,8 @@ UserInputHandler.kt takes care of the user's input
 
 AddRecipe.kt
 ```kotlin
-Interface Action { fun execute() }
-class AddRecipe(private val recipeOrganizer: RecipeOrganizer, private val userInput: UserInputHandler) : Action {...}
+Interface interfaces.Action { fun execute() }
+class AddRecipe(private val recipeOrganizer: RecipeOrganizer, private val userInput: UserInputHandler) : interfaces.Action {...}
 }
 ```
 Every action that a user can take is specified in a separate class, with makes it easily extendable for the Recipe Organizer

@@ -1,14 +1,16 @@
 package actions
 
-import managers.RecipeOrganizer
+
 import utils.RecipePrinter
 import user.UserInputHandler
+import interfaces.Action
+import interfaces.RecipeViewer
 
-class ViewAllRecipes(private val recipeOrganizer: RecipeOrganizer, private val userInput: UserInputHandler) : Action {
+class ViewAllRecipes(private val recipeViewer: RecipeViewer, private val userInput: UserInputHandler) : Action {
 
 
     override fun execute() {
-        val allRecipes = recipeOrganizer.getAllRecipes()
+        val allRecipes = recipeViewer.getAllRecipes()
         allRecipes.forEachIndexed { index, recipe ->
             println("${index + 1}. ${recipe.title}")
         }
@@ -20,7 +22,7 @@ class ViewAllRecipes(private val recipeOrganizer: RecipeOrganizer, private val u
             print("Enter the number of the recipe you want to view: ")
             val recipeNumber = readLine()?.toIntOrNull()
             if (recipeNumber != null && recipeNumber in 1..allRecipes.size) {
-                val selectedRecipe = recipeOrganizer.getRecipe(recipeNumber - 1)
+                val selectedRecipe = recipeViewer.getRecipe(recipeNumber - 1)
                 val recipePrinter = RecipePrinter()
                 if (selectedRecipe != null) {
                     recipePrinter.printRecipe(selectedRecipe)

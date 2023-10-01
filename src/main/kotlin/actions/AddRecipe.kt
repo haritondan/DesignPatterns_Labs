@@ -1,13 +1,11 @@
 package actions
 
-import managers.RecipeOrganizer
 import user.UserInputHandler
+import interfaces.Action
+import interfaces.RecipeAdder
 
-interface Action {
-    fun execute()
-}
 
-class AddRecipe(private val recipeOrganizer: RecipeOrganizer, private val userInput: UserInputHandler) : Action {
+class AddRecipe(private val recipeAdder: RecipeAdder, private val userInput: UserInputHandler) : Action {
     override fun execute() {
         println("You have chosen to add a new recipe. Please follow the steps below:")
 
@@ -17,7 +15,7 @@ class AddRecipe(private val recipeOrganizer: RecipeOrganizer, private val userIn
         println("Step 4: Enter the preparation steps. For each step, you will be asked to enter the step description. When you are done adding steps, type 'done'.")
 
         val recipe = userInput.promptForRecipeDetails()
-        recipeOrganizer.addRecipe(recipe)
+        recipeAdder.addRecipe(recipe)
 
         println("The recipe has been successfully added.")
     }
