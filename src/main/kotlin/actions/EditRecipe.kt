@@ -4,6 +4,7 @@ import user.UserInputHandler
 import interfaces.Action
 import interfaces.RecipeEditor
 import interfaces.RecipeViewer
+import utils.RecipeBuilder
 
 class EditRecipe(private val recipeEditor: RecipeEditor, private val recipeViewer: RecipeViewer, private val userInput: UserInputHandler) : Action {
 
@@ -20,7 +21,14 @@ class EditRecipe(private val recipeEditor: RecipeEditor, private val recipeViewe
         val recipeIndex = userInput.promptForRecipeIndex()
         if (recipeIndex != null) {
             val oldRecipe = recipeViewer.getAllRecipes()[recipeIndex - 1]
-            val newRecipe = userInput.promptForRecipeDetails(oldRecipe)
+            val oldRecipeBuilder = RecipeBuilder().apply {
+                title(oldRecipe.title)
+                description(oldRecipe.description)
+                ingredients(oldRecipe.ingredients)
+                steps(oldRecipe.steps)
+                type(oldRecipe.type)
+            }
+            val newRecipe = userInput.promptForRecipeDetails(oldRecipeBuilder)
             recipeEditor.editRecipe(oldRecipe, newRecipe)
 
             println("The recipe has been successfully edited.")

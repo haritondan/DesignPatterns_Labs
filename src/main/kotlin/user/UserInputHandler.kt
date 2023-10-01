@@ -2,9 +2,11 @@ package user
 
 import models.Ingredient
 import models.Recipe
+import utils.RecipeBuilder
+import interfaces.*
 
 class UserInputHandler {
-    fun promptForRecipeDetails(defaultRecipe: Recipe? = null): Recipe {
+    fun promptForRecipeDetails(defaultRecipe: RecipeBuilder? = null): Recipe {
         println("Enter recipe details:")
 
         print("Title: ")
@@ -13,7 +15,10 @@ class UserInputHandler {
         print("Description: ")
         val description = readLine().takeIf { it?.isNotEmpty() == true } ?: defaultRecipe?.description ?: ""
 
-        val ingredients = defaultRecipe?.ingredients?.toMutableList() ?: mutableListOf()
+        val recipeBuilder = RecipeBuilder()
+        recipeBuilder.title(title)
+        recipeBuilder.description(description)
+
         var ingredientName = ""
         while (ingredientName != "done") {
             print("Enter the name of an ingredient (or 'done' if there are no more ingredients): ")
@@ -21,21 +26,20 @@ class UserInputHandler {
             if (ingredientName != "done") {
                 print("Enter the quantity of the ingredient: ")
                 val ingredientQuantity = readLine() ?: ""
-                ingredients.add(Ingredient(ingredientName, ingredientQuantity))
+                recipeBuilder.addIngredient(Ingredient(ingredientName, ingredientQuantity))
             }
         }
 
-        val steps = defaultRecipe?.steps?.toMutableList() ?: mutableListOf()
         var step = ""
         while (step != "done") {
             print("Enter a preparation step (or 'done' if there are no more steps): ")
             step = readLine() ?: ""
             if (step != "done") {
-                steps.add(step)
+                recipeBuilder.addStep(step)
             }
         }
 
-        return Recipe(title, description, ingredients, steps)
+        return recipeBuilder.build()
     }
 
     fun promptForRecipeIndex(): Int? {

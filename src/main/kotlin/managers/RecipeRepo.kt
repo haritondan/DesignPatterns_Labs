@@ -1,6 +1,6 @@
 package managers
 import models.Recipe
 
-class RecipeRepo {
+object RecipeRepo {
     val recipes: MutableList<Recipe> = mutableListOf()
 }

@@ -1,7 +1,7 @@
 package models
 
 class Desert(
-    override val title: String,
+    override var title: String,
     override val description: String,
     override val ingredients: MutableList<AbstractIngredient>,
     override val steps: MutableList<String>,
