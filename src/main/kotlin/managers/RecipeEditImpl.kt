@@ -2,6 +2,7 @@ package managers
 
 import interfaces.RecipeEditor
 import models.Recipe
+import models.RecipeRepo
 
 class RecipeEditImpl(private val recipeRepository: RecipeRepo): RecipeEditor {
 

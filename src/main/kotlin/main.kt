@@ -2,13 +2,17 @@ import actions.AddRecipe
 import actions.DeleteRecipe
 import actions.EditRecipe
 import actions.ViewAllRecipes
+import app.App
+import app.AppFacade
+import decorators.RatedRecipe
 import managers.*
 import models.Ingredient
-import models.Recipe
+import models.RecipeRepo
 import user.UserInputHandler
 import utils.ItalianRecipeFactory
 import utils.MexicanRecipeFactory
 import utils.RecipeBuilder
+import utils.RecipePrinter
 
 fun main() {
     val recipeRepository = RecipeRepo
@@ -56,9 +60,6 @@ fun main() {
 
     val chocoCake = RecipeBuilder()
         .title("Chocolate Cake")
-        .description("Delicious chocolate cake")
-        .ingredients(mutableListOf(Ingredient("Sugar", "1 cup")))
-        .steps(mutableListOf("Step 1", "Step 2"))
         .type("Dessert")
         .build()
 
@@ -93,6 +94,15 @@ fun main() {
         .type("Mexican")
     val mexicanTaco = mexicanFactory.createRecipe(mexicanBuilder)
     mexicanTaco.cook() // Output: Cooking Mexican Taco
+    println("\n")
+
+
+//Decorator Pattern
+    println("Decorator Pattern")
+    val ratedRecipe = RatedRecipe(chocoCake, 5)
+    ratedRecipe.displayRecipe(RecipePrinter()) // This will display the recipe and its rating
+    println("\n")
+
 
     val actions = listOf(
         AddRecipe(recipeAdder, userInput),
@@ -101,8 +111,11 @@ fun main() {
         ViewAllRecipes(recipeViewer, userInput)
     )
 
-    val menuManager = MenuManager()
+    val menuManager = MenuManagerAdapter(MenuManager())
     val app = App(actions, menuManager, userInput)
 
-    app.start()
+    //Facade Pattern
+    val appFacade = AppFacade(app)
+
+    appFacade.start()
 }

@@ -1,13 +1,19 @@
 package managers
 
-class  MenuManager{
+import models.Menu
+import models.MenuItem
+
+class MenuManager {
+    private val menu = Menu("Welcome to the RecipexColl").apply {
+        add(MenuItem("Add Recipe", 1))
+        add(MenuItem("Edit Recipe", 2))
+        add(MenuItem("Delete Recipe", 3))
+        add(MenuItem("View All Recipes", 4))
+        add(MenuItem("Exit", 5))
+    }
+
     fun displayMenu() {
-        println("Welcome to the RecipexColl")
-        println("1. Add Recipe")
-        println("2. Edit Recipe")
-        println("3. Delete Recipe")
-        println("4. View All Recipes")
-        println("5. Exit")
+        println(menu.display())
         print("Enter your choice: ")
     }
 }

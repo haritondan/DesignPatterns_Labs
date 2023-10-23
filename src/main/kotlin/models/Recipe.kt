@@ -1,6 +1,8 @@
 package models
 import interfaces.Clone
 import interfaces.RecipeCook
+import interfaces.RecipeDecoratorInterface
+import utils.IRecipePrinter
 
 open class Recipe (
     open var title: String,
@@ -8,7 +10,7 @@ open class Recipe (
     open val ingredients: MutableList<AbstractIngredient>,
     open val steps: MutableList<String>,
     open val type: String = "No Type Specified"
-    ):Clone, RecipeCook {
+    ):Clone, RecipeCook, RecipeDecoratorInterface {
 
     override fun clone(): Recipe {
         return Recipe(title,description, ingredients, steps, type)
@@ -16,6 +18,10 @@ open class Recipe (
 
     override fun cook() {
         println("Cooking")
+    }
+
+    override fun displayRecipe(recipePrinter: IRecipePrinter) {
+        recipePrinter.printRecipe(this)
     }
 
 }

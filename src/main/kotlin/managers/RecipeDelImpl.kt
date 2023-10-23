@@ -2,6 +2,7 @@ package managers
 
 import interfaces.RecipeDeleter
 import models.Recipe
+import models.RecipeRepo
 
 
 class RecipeDelImpl(private val recipeRepository: RecipeRepo): RecipeDeleter {

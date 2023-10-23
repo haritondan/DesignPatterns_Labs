@@ -2,6 +2,7 @@ package managers
 
 import interfaces.RecipeViewer
 import models.Recipe
+import models.RecipeRepo
 
 class RecipeViewImpl(private val recipeRepository: RecipeRepo) : RecipeViewer {
     override fun getAllRecipes(): List<Recipe> {

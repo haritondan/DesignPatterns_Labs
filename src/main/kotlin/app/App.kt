@@ -1,13 +1,14 @@
+package app
+
 import interfaces.Action
-import managers.MenuManager
+import interfaces.MenuDisplay
 import user.UserInputHandler
 
-
-class App(private val actions: List<Action>, private val menuManager: MenuManager, private val userInput: UserInputHandler) {
+class App(private val actions: List<Action>, private val menuDisplay: MenuDisplay, private val userInput: UserInputHandler) {
     fun start() {
         var running = true
         while (running) {
-            menuManager.displayMenu()
+            menuDisplay.display()
             val choice = userInput.promptForChoice() - 1
             if (choice in actions.indices) {
                 actions[choice].execute()
@@ -19,7 +20,6 @@ class App(private val actions: List<Action>, private val menuManager: MenuManage
         }
     }
 }
-
 
 
 
